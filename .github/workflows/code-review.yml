@@ -1,0 +1,33 @@
+name: 'Automated Deep Code Review'
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    name: 'AI Code Review & Security Gate'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Deep Code Review Action
+        uses: lekeomotayo/deep-code-review-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          model: 'gpt-4o'
+          max_tokens_per_batch: 4000
+          severity_threshold: 'LOW'
+          fail_on_severity: 'CRITICAL'
+          enable_pii_scrubbing: 'true'
+          enable_injection_defense: 'true'

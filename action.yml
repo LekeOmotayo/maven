@@ -1,0 +1,83 @@
+name: 'Enterprise Deep Code Review Action'
+description: 'Automated deep code reviews on pull requests with token-aware diff batching, PII scrubbing, prompt injection defense, and structured inline comments.'
+author: 'Leke Omotayo'
+
+branding:
+  icon: 'shield'
+  color: 'purple'
+
+inputs:
+  github_token:
+    description: 'GitHub Token for authentication and posting PR review comments'
+    required: true
+    default: '${{ github.token }}'
+
+  openai_api_key:
+    description: 'API key for OpenAI or compatible LLM review endpoint'
+    required: false
+
+  openai_base_url:
+    description: 'Base URL for OpenAI-compatible endpoint'
+    required: false
+    default: 'https://api.openai.com/v1'
+
+  model:
+    description: 'LLM model to use for deep code review'
+    required: false
+    default: 'gpt-4o'
+
+  max_tokens_per_batch:
+    description: 'Maximum estimated tokens allowed per review batch'
+    required: false
+    default: '4000'
+
+  severity_threshold:
+    description: 'Minimum severity level to post (CRITICAL, HIGH, MEDIUM, LOW, INFO)'
+    required: false
+    default: 'LOW'
+
+  fail_on_severity:
+    description: 'If set, fails the Action run if findings match or exceed this level (e.g. CRITICAL or HIGH)'
+    required: false
+
+  ignore_patterns:
+    description: 'Multiline list of glob patterns to exclude from reviews'
+    required: false
+    default: |
+      *.lock
+      *-lock.json
+      *.min.js
+      *.min.css
+      dist/**
+      build/**
+
+  enable_pii_scrubbing:
+    description: 'Enable automatic scrubbing of credentials, API keys, and PII before LLM dispatch'
+    required: false
+    default: 'true'
+
+  enable_injection_defense:
+    description: 'Enable nonced structural tagging and prompt injection detection heuristics'
+    required: false
+    default: 'true'
+
+  is_mock_mode:
+    description: 'Run in offline simulated mock mode (ideal for unit testing and CI test environments)'
+    required: false
+    default: 'false'
+
+outputs:
+  total_comments:
+    description: 'Total number of actionable inline comments posted'
+  critical_count:
+    description: 'Number of critical severity findings'
+  high_count:
+    description: 'Number of high severity findings'
+  review_status:
+    description: 'Final review decision (APPROVED, CHANGES_REQUESTED, COMMENTED)'
+  redactions_count:
+    description: 'Total number of sensitive tokens/PII redacted'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,42 @@
+{
+  "name": "@lekeomotayo/deep-code-review-action",
+  "version": "1.0.0",
+  "description": "Enterprise-ready TypeScript/Node.js GitHub Action that automates deep code reviews on pull requests with PII scrubbing, prompt injection defense, and structured inline comments.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'"
+  },
+  "keywords": [
+    "github-action",
+    "code-review",
+    "ai",
+    "llm",
+    "security",
+    "pii-scrubber",
+    "prompt-injection-defense",
+    "typescript",
+    "octokit"
+  ],
+  "author": "Leke Omotayo",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@octokit/rest": "^20.0.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "@vercel/ncc": "^0.38.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}

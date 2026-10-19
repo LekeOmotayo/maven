@@ -1,0 +1,22 @@
+services:
+  # ── Maven GitHub Action Documentation & Interactive Simulator Portal ───────
+  - type: web
+    name: maven-action-docs
+    env: static
+    buildCommand: "" # No build step required; vanilla HTML/CSS/JS
+    staticPublishPath: docs
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains; preload
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
